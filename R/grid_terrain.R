@@ -101,8 +101,6 @@ grid_terrain.LAS = function(las, res = 1, algorithm, keep_lowest = FALSE, full_r
   # Non standart evaluation (R CMD check)
   . <- Z <- Zref <- X <- Y <- Classification <- NULL
 
-  # Delaunay triangulation with boost requires to
-  # compute back integer coordinates
   xscale  <- las@header@PHB[["X scale factor"]]
   yscale  <- las@header@PHB[["Y scale factor"]]
   zscale  <- las@header@PHB[["Z scale factor"]]
@@ -138,7 +136,7 @@ grid_terrain.LAS = function(las, res = 1, algorithm, keep_lowest = FALSE, full_r
   # Interpolate the terrain
   verbose("Interpolating ground points...")
   lidR.context <- "grid_terrain"
-  Zg <- algorithm(ground, grid, scales, offsets)
+  Zg <- algorithm(ground, grid)
   Zg <- round_any(Zg, zscale)
   cells <- raster::cellFromXY(layout, grid[, .(X,Y)])
   suppressWarnings(layout[cells] <- Zg)

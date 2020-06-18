@@ -49,10 +49,10 @@
 #' plot_dtm3d(dtm)
 tin = function()
 {
-  f = function(what, where, scales = c(0,0), offsets = c(0,0))
+  f = function(what, where)
   {
     assert_is_valid_context(LIDRCONTEXTSPI, "tin")
-    z    <- interpolate_delaunay(what, where, trim = 0, scales = scales, offsets = offsets)
+    z    <- interpolate_delaunay(what, where, trim = 0)
     isna <- is.na(z)
     nnas <- sum(isna)
     if (nnas > 0) {
@@ -165,54 +165,13 @@ interpolate_kriging = function(points, coord, model, k)
   return(x$var1.pred)
 }
 
-interpolate_delaunay <- function(points, coord, trim = 0, scales = c(1,1), offsets = c(0,0), options = "QbB")
+interpolate_delaunay <- function(points, coord, trim = 0)
 {
-  stopifnot(is.numeric(trim), length(trim) == 1L)
-  stopifnot(is.numeric(scales), length(scales) == 2L)
-  stopifnot(is.numeric(offsets), length(offsets) == 2L)
   stopifnot(is.data.frame(coord))
-
-  boosted_triangulation <- TRUE
-
-  if (inherits(points, "LAS")) {
-    xscale  <- points@header@PHB[["X scale factor"]]
-    yscale  <- points@header@PHB[["Y scale factor"]]
-    xoffset <- points@header@PHB[["X offset"]]
-    yoffset <- points@header@PHB[["Y offset"]]
-    scales  <- c(xscale, yscale)
-    offsets <- c(xoffset, yoffset)
-    points  <- points@data
-  }
-
   stopifnot(is.data.frame(points))
 
-  if (scales[1] != scales[2]) {
-    message("The Delaunay triangulation reverted to the old slow method because xy scale factors are different so the fast method cannot be applied.")
-    boosted_triangulation <- FALSE
-  }
-
-  # Check if coordinates actually match the resolution
-  # Check only 100 of them including the first one
-  n <- min(100, length(points$X)) - 1
-  s <- c(1, sample(2:length(points$X), n))
-  X <- points$X[s]
-  Y <- points$Y[s]
-  x <- fast_countunquantized(X, scales[1], offsets[1])
-  y <- fast_countunquantized(Y, scales[2], offsets[2])
-
-  if (x > 0 | y > 0)
-  {
-    message("The Delaunay triangulation reverted to the old slow method because xy coordinates were not convertible to integer values. xy scale factors and offsets are likely to be invalid")
-    boosted_triangulation <- FALSE
-  }
-
-  if (boosted_triangulation) {
-    return(C_interpolate_delaunay(points, coord, scales, offsets, trim, getThreads()))
-  }
-  else {
-    P <- as.matrix(points)
-    X <- as.matrix(coord)
-    D <- tDelaunay(P, trim = trim)
-    return(tInterpolate(D, P, X, getThreads()))
-  }
+  P <- as.matrix(points)
+  X <- as.matrix(coord)
+  D <- tDelaunay(P, trim = trim)
+  return(tInterpolate(D, P, X, getThreads()))
 }

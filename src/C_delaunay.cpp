@@ -4,13 +4,13 @@
 #include "Progress.h"
 #include "GridPartition.h"
 
-#include <boost/polygon/voronoi.hpp>
-
-using boost::polygon::voronoi_diagram;
+//using boost::polygon::voronoi_diagram;
 using namespace Rcpp;
 
+typedef GridPartition SpatialIndex;
+
 // The point structure must be an integral number. Boost perform on integral number only.
-struct point_int
+/*struct point_int
 {
   int x;
   int y;
@@ -40,8 +40,6 @@ namespace boost
     };
   }
 }
-
-typedef GridPartition SpatialIndex;
 
 // [[Rcpp::export(rng = false)]]
 IntegerMatrix C_delaunay(DataFrame P, NumericVector scales, NumericVector offsets, double trim = 0)
@@ -317,7 +315,7 @@ NumericVector C_interpolate_delaunay(DataFrame P, DataFrame L, NumericVector sca
   }
 
   return z_out;
-}
+}*/
 
 // [[Rcpp::export(rng = false)]]
 NumericMatrix  C_tinfo(IntegerMatrix D, NumericMatrix P)

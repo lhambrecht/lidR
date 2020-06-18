@@ -151,15 +151,6 @@ normalize_height.LAS = function(las, algorithm, na.rm = FALSE, use_class = c(2L,
     # Non standart evaluation (R CMD check)
     . <- Z <- Zref <- X <- Y <- Classification <- NULL
 
-    # Delaunay triangulation with boost requiere to
-    # compute back integer coordinates
-    xscale  <- las@header@PHB[["X scale factor"]]
-    yscale  <- las@header@PHB[["Y scale factor"]]
-    xoffset <- las@header@PHB[["X offset"]]
-    yoffset <- las@header@PHB[["Y offset"]]
-    scales  <- c(xscale, yscale)
-    offsets <- c(xoffset, yoffset)
-
     # Select the ground points
     ground  <- las@data[Classification %in% c(use_class), .(X,Y,Z)]
     if (nrow(ground) == 0) stop("No ground points found. Impossible to compute a DTM.", call. = FALSE)
@@ -167,7 +158,7 @@ normalize_height.LAS = function(las, algorithm, na.rm = FALSE, use_class = c(2L,
 
     # wbuffer = !"buffer" %in% names(las@data)
     lidR.context <- "normalize_height"
-    Zground <- algorithm(ground, las@data, scales, offsets)
+    Zground <- algorithm(ground, las@data)
     isna    <- is.na(Zground)
     nnas    <- sum(isna)
 

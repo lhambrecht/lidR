@@ -265,15 +265,6 @@ pitfree <- function(thresholds = c(0, 2, 5, 10, 15), max_edge = c(0, 1), subcirc
       cloud <- las@data[ReturnNumber == 1L, .(X, Y, Z)]
     }
 
-    # Delaunay triangulation with boost requiere to
-    # compute back integer coordinates
-    xscale <- las@header@PHB[["X scale factor"]]
-    yscale <- las@header@PHB[["Y scale factor"]]
-    xoffset <- las@header@PHB[["X offset"]]
-    yoffset <- las@header@PHB[["Y offset"]]
-    scales <- c(xscale, yscale)
-    offsets <- c(xoffset, yoffset)
-
     # subcircle the data
     if (subcircle > 0) {
       verbose("Subcircling points...")
@@ -308,7 +299,7 @@ pitfree <- function(thresholds = c(0, 2, 5, 10, 15), max_edge = c(0, 1), subcirc
 
       if (fast_countover(cloud$Z, th) > 3) {
         cloud <- cloud[Z >= th]
-        Ztemp <- interpolate_delaunay(cloud, grid, edge, scales, offsets)
+        Ztemp <- interpolate_delaunay(cloud, grid, edge)
 
         if (i == 1 && all(is.na(Ztemp))) {
           stop("Interpolation failed in the first layer (NAs everywhere). Maybe there are too few points.", call. = FALSE)

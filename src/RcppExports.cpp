@@ -44,34 +44,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// C_delaunay
-IntegerMatrix C_delaunay(DataFrame P, NumericVector scales, NumericVector offsets, double trim);
-RcppExport SEXP _lidR_C_delaunay(SEXP PSEXP, SEXP scalesSEXP, SEXP offsetsSEXP, SEXP trimSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::traits::input_parameter< DataFrame >::type P(PSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type scales(scalesSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type offsets(offsetsSEXP);
-    Rcpp::traits::input_parameter< double >::type trim(trimSEXP);
-    rcpp_result_gen = Rcpp::wrap(C_delaunay(P, scales, offsets, trim));
-    return rcpp_result_gen;
-END_RCPP
-}
-// C_interpolate_delaunay
-NumericVector C_interpolate_delaunay(DataFrame P, DataFrame L, NumericVector scales, NumericVector offsets, double trim, int ncpu);
-RcppExport SEXP _lidR_C_interpolate_delaunay(SEXP PSEXP, SEXP LSEXP, SEXP scalesSEXP, SEXP offsetsSEXP, SEXP trimSEXP, SEXP ncpuSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::traits::input_parameter< DataFrame >::type P(PSEXP);
-    Rcpp::traits::input_parameter< DataFrame >::type L(LSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type scales(scalesSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type offsets(offsetsSEXP);
-    Rcpp::traits::input_parameter< double >::type trim(trimSEXP);
-    Rcpp::traits::input_parameter< int >::type ncpu(ncpuSEXP);
-    rcpp_result_gen = Rcpp::wrap(C_interpolate_delaunay(P, L, scales, offsets, trim, ncpu));
-    return rcpp_result_gen;
-END_RCPP
-}
 // C_tinfo
 NumericMatrix C_tinfo(IntegerMatrix D, NumericMatrix P);
 RcppExport SEXP _lidR_C_tinfo(SEXP DSEXP, SEXP PSEXP) {
@@ -481,8 +453,6 @@ static const R_CallMethodDef CallEntries[] = {
     {"_lidR_filterTimeBlockPulses", (DL_FUNC) &_lidR_filterTimeBlockPulses, 1},
     {"_lidR_cmpCPA", (DL_FUNC) &_lidR_cmpCPA, 1},
     {"_lidR_C_dalponte2016", (DL_FUNC) &_lidR_C_dalponte2016, 6},
-    {"_lidR_C_delaunay", (DL_FUNC) &_lidR_C_delaunay, 4},
-    {"_lidR_C_interpolate_delaunay", (DL_FUNC) &_lidR_C_interpolate_delaunay, 6},
     {"_lidR_C_tinfo", (DL_FUNC) &_lidR_C_tinfo, 2},
     {"_lidR_C_tsearch", (DL_FUNC) &_lidR_C_tsearch, 4},
     {"_lidR_C_lmf", (DL_FUNC) &_lidR_C_lmf, 5},

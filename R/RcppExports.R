@@ -13,14 +13,6 @@ C_dalponte2016 <- function(Image, Seeds, th_seed, th_crown, th_tree, DIST) {
     .Call(`_lidR_C_dalponte2016`, Image, Seeds, th_seed, th_crown, th_tree, DIST)
 }
 
-C_delaunay <- function(P, scales, offsets, trim = 0) {
-    .Call(`_lidR_C_delaunay`, P, scales, offsets, trim)
-}
-
-C_interpolate_delaunay <- function(P, L, scales, offsets, trim = 0, ncpu = 1L) {
-    .Call(`_lidR_C_interpolate_delaunay`, P, L, scales, offsets, trim, ncpu)
-}
-
 C_tinfo <- function(D, P) {
     .Call(`_lidR_C_tinfo`, D, P)
 }
