@@ -58,4 +58,3 @@ test_that("Delaunay fails when necessary", {
   ps <- 2
   expect_error(lidR:::tDelaunay(ps), "No method to triangulate this input")
 })
-

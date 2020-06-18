@@ -266,8 +266,17 @@ pitfree <- function(thresholds = c(0, 2, 5, 10, 15), max_edge = c(0, 1), subcirc
     }
 
     # subcircle the data
-    if (subcircle > 0) {
+    if (subcircle > 0)
+    {
       verbose("Subcircling points...")
+
+      xscale <- las@header@PHB[["X scale factor"]]
+      yscale <- las@header@PHB[["Y scale factor"]]
+      xoffset <- las@header@PHB[["X offset"]]
+      yoffset <- las@header@PHB[["Y offset"]]
+      scales <- c(xscale, yscale)
+      offsets <- c(xoffset, yoffset)
+
       bbox <- raster::extent(las)
       cloud <- subcircled(cloud, subcircle, 8L)
       cloud <- cloud[data.table::between(X, bbox@xmin, bbox@xmax) & data.table::between(Y, bbox@ymin, bbox@ymax)]

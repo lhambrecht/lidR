@@ -14,7 +14,7 @@ tDelaunay = function(P, trim = 0, ...)
   if (nrow(Q) < 3)
     stop("Internal error in tDelaunay: cannot triangulate less than 3 points.", call. = FALSE)
 
-  Q <- RTriangle::pslg(Q)
+  Q <- pslg(Q)
   D <- RTriangle::triangulate(Q)[["T"]]
 
   if (trim != 0)
@@ -45,3 +45,24 @@ tSearch = C_tsearch
 
 # @rdname tDelaunay
 tInfo =  C_tinfo
+
+
+pslg <- function(P, PB = NA, PA = NA, S = NA, SB = NA, H = NA)
+{
+  if (ncol(P) != 2)  stop("Matrix of vertices P should have 2 columns")
+  PA <- matrix(0, nrow(P), 0)
+  PB <- 0
+  PB <- rep(PB, length.out = nrow(P))
+  S <- matrix(0, 0, 2)
+  SB <- 0
+  SB <- rep(SB, length.out = nrow(S))
+  H <- matrix(0, 0, 2)
+  storage.mode(PA) <- "double"
+  storage.mode(PB) <- "integer"
+  storage.mode(S) <- "integer"
+  storage.mode(SB) <- "integer"
+  storage.mode(H) <- "double"
+  ret <- list(P = P, PA = PA, PB = PB, S = S, SB = SB, H = H)
+  class(ret) <- "pslg"
+  return(ret)
+}
